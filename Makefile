@@ -71,6 +71,5 @@ base-pull:
 	@$(RUNNER) pull ${REPOSITORY}:${VERSION}-base
 	touch .base
 
-android-push: android
-	@$(RUNNER) push ${REPOSITORY}:${VERSION}-android
-	@$(RUNNER) push ${REPOSITORY}:android
+android-push:
+	@$(RUNNER) buildx build --pull --push --build-arg FYNE_CROSS_IMAGES_VERSION=${VERSION} --build-arg FYNE_CROSS_REPOSITORY=${REPOSITORY} -f ${CURDIR}/android/Dockerfile -t ${REPOSITORY}:${VERSION}-android -t ${REPOSITORY}:android .
