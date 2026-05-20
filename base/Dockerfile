@@ -27,7 +27,7 @@ RUN set -eux; \
     rm -r /var/lib/apt/lists/*;
 
 # Add Go and Zig to PATH
-ENV PATH /usr/local/go/bin:/usr/local/zig:$PATH
+ENV PATH=/usr/local/go/bin:/usr/local/zig:$PATH
 
 # Install Go
 RUN set -eux; \
@@ -51,8 +51,8 @@ RUN set -eux; \
     rm go.tgz; \
     go version;
 
-ENV GOPATH /go
-ENV PATH $GOPATH/bin:$PATH
+ENV GOPATH=/go
+ENV PATH=$GOPATH/bin:$PATH
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
 WORKDIR $GOPATH
 
