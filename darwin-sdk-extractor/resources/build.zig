@@ -4,13 +4,17 @@ pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
-    const xar = b.addStaticLibrary(.{
+    const xar = b.addLibrary(.{
         .name = "xar",
-        .target = target,
-        .optimize = optimize,
+        .root_module = b.createModule(.{
+            .root_source_file = null,
+            .target = target,
+            .optimize = optimize,
+        }),
+        .linkage = .static,
     });
     xar.addCSourceFiles(.{
-        .files = &[_][]const u8{
+        .files = &.{
             "xar/xar/lib/archive.c",
             "xar/xar/lib/arcmod.c",
             "xar/xar/lib/b64.c",
@@ -34,7 +38,7 @@ pub fn build(b: *std.Build) void {
             "xar/xar/lib/util.c",
             "xar/xar/lib/zxar.c",
         },
-        .flags = &[_][]const u8{},
+        .flags = &.{},
     });
     xar.addIncludePath(b.path("xar/xar/include"));
     xar.addIncludePath(.{ .cwd_relative = "/usr/include" });
@@ -59,12 +63,15 @@ pub fn build(b: *std.Build) void {
 
     const xarexe = b.addExecutable(.{
         .name = "xar",
-        .target = target,
-        .optimize = optimize,
+        .root_module = b.createModule(.{
+            .root_source_file = null,
+            .target = target,
+            .optimize = optimize,
+        }),
     });
     xarexe.addCSourceFile(.{
         .file = b.path("xar/xar/src/xar.c"),
-        .flags = &[_][]const u8{},
+        .flags = &.{},
     });
     xarexe.addIncludePath(b.path("xar/xar/include"));
     xarexe.addIncludePath(.{ .cwd_relative = "/usr/include" });
@@ -86,12 +93,15 @@ pub fn build(b: *std.Build) void {
 
     const exe = b.addExecutable(.{
         .name = "pbxz",
-        .target = target,
-        .optimize = optimize,
+        .root_module = b.createModule(.{
+            .root_source_file = null,
+            .target = target,
+            .optimize = optimize,
+        }),
     });
     exe.addCSourceFile(.{
         .file = b.path("pbzx/pbzx.c"),
-        .flags = &[_][]const u8{},
+        .flags = &.{},
     });
     exe.addIncludePath(b.path("zig-out/include"));
     exe.addIncludePath(.{ .cwd_relative = "/usr/include" });
