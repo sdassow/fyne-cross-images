@@ -13,7 +13,7 @@ RUN set -eux; \
     rm -rf /usr/local/zig; \
     arch="$(dpkg --print-architecture)"; \
     url=; \
-    public_key=${ZIG_MINISIGN_KEY}; \
+    public_key=${ZIG_MINISIGN_PUBKEY}; \
     case "$arch" in \
         'amd64') \
             arch="x86_64";\
