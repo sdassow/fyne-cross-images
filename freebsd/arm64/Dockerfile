@@ -10,7 +10,7 @@ FROM ${FYNE_CROSS_REPOSITORY}:${FYNE_CROSS_IMAGES_VERSION}-freebsd-base as pkg
 ENV ABI="FreeBSD:14:aarch64"
 RUN mkdir /freebsd \
     && mkdir /etc/pkg/ \
-	&& curl https://download.freebsd.org/ftp/releases/arm64/14.2-RELEASE/base.txz | \
+	&& curl https://download.freebsd.org/ftp/releases/arm64/14.3-RELEASE/base.txz | \
 		bsdtar -xf - -C /freebsd ./lib ./usr/lib ./usr/libdata ./usr/include ./usr/share/keys ./etc \
     && cp /freebsd/etc/pkg/FreeBSD.conf /etc/pkg/ \
     && ln -s /freebsd/usr/share/keys /usr/share/keys 
