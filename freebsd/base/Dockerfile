@@ -48,8 +48,8 @@ FROM pkg
 
 COPY --from=pkg /pkg /pkg
 
-ENV PATH=/pkg/sbin:${PATH}
-ENV LLVM_VERSION=17
+ENV PATH /pkg/sbin:${PATH}
+ENV LLVM_VERSION 17
  
 RUN apt-get update -qq \
     && apt install -y -q --no-install-recommends gnupg \
@@ -64,4 +64,4 @@ RUN apt-get update -qq \
     && apt-get clean \
     && rm -r /var/lib/apt/lists/*;
 
-ENV PATH=/usr/lib/llvm-${LLVM_VERSION}/bin:${PATH}
+ENV PATH /usr/lib/llvm-${LLVM_VERSION}/bin:${PATH}

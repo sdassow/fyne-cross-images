@@ -6,7 +6,7 @@ FROM ${FYNE_CROSS_REPOSITORY}:${FYNE_CROSS_IMAGES_VERSION}-base
 
 # 0.9.1 version of Zig to support darwin targets
 # see: https://github.com/ziglang/zig/issues/20689
-ENV ZIG_VERSION=0.9.1
+ENV ZIG_VERSION 0.9.1
 
 # Install Zig
 RUN set -eux; \
