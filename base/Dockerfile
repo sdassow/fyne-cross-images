@@ -1,12 +1,12 @@
-FROM debian:bookworm-slim AS base
+FROM debian:trixie-slim AS base
 
-ENV GO_VERSION=1.24.6
-ENV GO_AMD64_CHECKSUM="bbca37cc395c974ffa4893ee35819ad23ebb27426df87af92e93a9ec66ef8712"
-ENV GO_ARM64_CHECKSUM="124ea6033a8bf98aa9fbab53e58d134905262d45a022af3a90b73320f3c3afd5"
-ENV ZIG_VERSION=0.14.1
+ENV GO_VERSION=1.25.10
+ENV GO_AMD64_CHECKSUM="42d4f7a32316aa66591eca7e89867256057a4264451aca10570a715b3637ba70"
+ENV GO_ARM64_CHECKSUM="654da1f9b50a5d1c2a85ccf8ed405aa89c06e94d18384628bf186f7712677b08"
+ENV ZIG_VERSION=0.16.0
 ENV ZIG_MINISIGN_KEY="RWSGOq2NVecA2UPNdBUZykf1CCb147pkmdtYxgb3Ti+JO/wCYvhbAb/U"
-ENV FYNE_VERSION=v2.5.5
-ENV FIXUID_VERSION=0.5.1
+ENV FYNE_CLI_VERSION=v1.7.1
+ENV FIXUID_VERSION=0.6.0
 ENV MINISIGN_VERSION=0.12
 
 # Install common dependencies
@@ -109,7 +109,7 @@ RUN set -eux; \
 
 # Install the fyne CLI tool
 RUN set -eux; \ 
-    go install -ldflags="-w -s" -v "fyne.io/fyne/v2/cmd/fyne@${FYNE_VERSION}"; \
+    go install -ldflags="-w -s" -v "fyne.io/tools/cmd/fyne@${FYNE_CLI_VERSION}"; \
     mv /go/bin/fyne /usr/local/bin/fyne; \
     fyne version; \
     go clean -cache -modcache; \
