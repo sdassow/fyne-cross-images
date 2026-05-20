@@ -37,7 +37,7 @@ RUN set -eux; \
 
 RUN mkdir -p /pkg-src \
     && mkdir -p /pkg/etc \
-    && curl -L https://github.com/freebsd/pkg/archive/1.19.0.tar.gz | bsdtar -xf - -C /pkg-src \
+    && curl -L https://github.com/freebsd/pkg/archive/1.19.0.tar.gz | bsdtar -xzf - -C /pkg-src \
     && cd /pkg-src/pkg-* \ 
     && ./configure --with-libarchive.pc --prefix=/pkg \
     && make -j4 || make V=1 \
