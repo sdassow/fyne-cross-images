@@ -17,7 +17,7 @@ RUN mkdir /freebsd \
 
 # Set pkg variables required to compile
 ENV PKG_CONFIG_SYSROOT_DIR=/freebsd
-ENV PKG_CONFIG_LIBDIR=/freebsd/usr/libdata/pkgconfig:/freebsd/usr/local/libdata/pkgconfig
+ENV PKG_CONFIG_LIBDIR=/freebsd/usr/libdata/pkgconfig:/freebsd/usr/local/libdata/pkgconfig:/freebsd/usr/local/share/pkgconfig
 
 RUN set -eux; \
     pkg -o OSVERSION=1404000 fetch -o /tmp/download --yes -d xorg-minimal xorgproto glfw; \
