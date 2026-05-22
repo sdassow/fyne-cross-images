@@ -8,7 +8,6 @@ FROM ${FYNE_CROSS_REPOSITORY}:${FYNE_CROSS_IMAGES_VERSION}-freebsd-base AS pkg
 # and install fyne dependencies
 # Based on: https://github.com/myfreeweb/docker-freebsd-cross/tree/fc70196f62c00a10eb61a45a4798e09214e0cdfd
 ENV ABI="FreeBSD:14:aarch64"
-ENV OSVERSION="1404000"
 RUN mkdir /freebsd \
     && mkdir /etc/pkg/ \
 	&& curl https://download.freebsd.org/ftp/releases/arm64/14.4-RELEASE/base.txz | \
@@ -20,7 +19,7 @@ RUN mkdir /freebsd \
 ENV PKG_CONFIG_SYSROOT_DIR=/freebsd
 ENV PKG_CONFIG_LIBDIR=/freebsd/usr/libdata/pkgconfig:/freebsd/usr/local/libdata/pkgconfig
 
-RUN pkg fetch -o /tmp/download --yes -d xorg-minimal glfw; \
+RUN pkg -o OSVERSION=1404000 fetch -o /tmp/download --yes -d xorg-minimal glfw; \
     rm -rf /tmp/download/All/Hashed/*llvm*; \
     rm -rf /tmp/download/All/Hashed/*perl*; \
     rm -rf /tmp/download/All/Hashed/*python*; \
