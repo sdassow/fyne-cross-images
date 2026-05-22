@@ -10,7 +10,7 @@ FROM ${FYNE_CROSS_REPOSITORY}:${FYNE_CROSS_IMAGES_VERSION}-freebsd-base AS pkg
 ENV ABI="FreeBSD:14:amd64"
 RUN mkdir /freebsd \
     && mkdir /etc/pkg/ \
-	&& curl https://download.freebsd.org/ftp/releases/amd64/14.3-RELEASE/base.txz | \
+	&& curl https://download.freebsd.org/ftp/releases/amd64/14.4-RELEASE/base.txz | \
 		bsdtar -xf - -C /freebsd ./lib ./usr/lib ./usr/libdata ./usr/include ./usr/share/keys ./etc \
     && cp /freebsd/etc/pkg/FreeBSD.conf /etc/pkg/ \
     && ln -s /freebsd/usr/share/keys /usr/share/keys 
@@ -19,11 +19,12 @@ RUN mkdir /freebsd \
 ENV PKG_CONFIG_SYSROOT_DIR=/freebsd
 ENV PKG_CONFIG_LIBDIR=/freebsd/usr/libdata/pkgconfig:/freebsd/usr/local/libdata/pkgconfig
 
-RUN pkg fetch -o /tmp/download --yes -d xorg-minimal glfw; \
-    rm -rf /tmp/download/All/*llvm*; \
-    rm -rf /tmp/download/All/*perl*; \
-    rm -rf /tmp/download/All/*python*; \
-    for f in  /tmp/download/All/*.pkg;\ 
+RUN set -eux; \
+    pkg -o OSVERSION=1404000 fetch -o /tmp/download --yes -d xorg-minimal xorgproto glfw; \
+    rm -rf /tmp/download/All/Hashed/*llvm*; \
+    rm -rf /tmp/download/All/Hashed/*perl*; \
+    rm -rf /tmp/download/All/Hashed/*python*; \
+    for f in  /tmp/download/All/Hashed/*.pkg; \
         do bsdtar -xvf "$f" -C /freebsd;\
     done; \
-    rm -rf /tmp/download
+    rm -rf  /tmp/download
