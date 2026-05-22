@@ -10,7 +10,7 @@ FROM ${FYNE_CROSS_REPOSITORY}:${FYNE_CROSS_IMAGES_VERSION}-freebsd-base AS pkg
 ENV ABI="FreeBSD:14:aarch64"
 RUN mkdir /freebsd \
     && mkdir /etc/pkg/ \
-	&& curl https://download.freebsd.org/ftp/releases/arm64/14.3-RELEASE/base.txz | \
+	&& curl https://download.freebsd.org/ftp/releases/arm64/14.4-RELEASE/base.txz | \
 		bsdtar -xf - -C /freebsd ./lib ./usr/lib ./usr/libdata ./usr/include ./usr/share/keys ./etc \
     && cp /freebsd/etc/pkg/FreeBSD.conf /etc/pkg/ \
     && ln -s /freebsd/usr/share/keys /usr/share/keys 
@@ -19,6 +19,7 @@ RUN mkdir /freebsd \
 ENV PKG_CONFIG_SYSROOT_DIR=/freebsd
 ENV PKG_CONFIG_LIBDIR=/freebsd/usr/libdata/pkgconfig:/freebsd/usr/local/libdata/pkgconfig
 
+ENV OSVERSION="1404000"
 RUN pkg fetch -o /tmp/download --yes -d xorg-minimal glfw; \
     rm -rf /tmp/download/All/*llvm*; \
     rm -rf /tmp/download/All/*perl*; \
