@@ -51,7 +51,7 @@ FROM pkg
 COPY --from=pkg /pkg /pkg
 
 ENV PATH=/pkg/sbin:${PATH}
-ENV LLVM_VERSION=21
+ENV LLVM_VERSION=22
  
 RUN apt-get update -qq \
     && apt install -y -q --no-install-recommends gnupg \
