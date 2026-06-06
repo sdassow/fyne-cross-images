@@ -35,9 +35,11 @@ RUN set -eux; \
     apt-get clean; \
     rm -r /var/lib/apt/lists/*;
 
+ENV PKG_VERSION=2.7.5
+
 RUN mkdir -p /pkg-src \
     && mkdir -p /pkg/etc \
-    && curl -L https://github.com/freebsd/pkg/archive/2.7.5.tar.gz | bsdtar -xzf - -C /pkg-src \
+    && curl -L https://github.com/freebsd/pkg/archive/${PKG_VERSION}.tar.gz | bsdtar -xzf - -C /pkg-src \
     && cd /pkg-src/pkg-* \ 
     && ./configure --with-libarchive.pc --prefix=/pkg \
     && make -j4 || make V=1 \
