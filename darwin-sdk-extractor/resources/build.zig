@@ -4,13 +4,18 @@ pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
-    const xar = b.addStaticLibrary(.{
-        .name = "xar",
+    const xarmod = b.createModule(.{
+        .root_source_file = null,
         .target = target,
         .optimize = optimize,
     });
-    xar.addCSourceFiles(.{
-        .files = &[_][]const u8{
+    const xar = b.addLibrary(.{
+        .name = "xar",
+        .root_module = xarmod,
+        .linkage = .static,
+    });
+    xarmod.addCSourceFiles(.{
+        .files = &.{
             "xar/xar/lib/archive.c",
             "xar/xar/lib/arcmod.c",
             "xar/xar/lib/b64.c",
@@ -34,21 +39,21 @@ pub fn build(b: *std.Build) void {
             "xar/xar/lib/util.c",
             "xar/xar/lib/zxar.c",
         },
-        .flags = &[_][]const u8{},
+        .flags = &.{},
     });
-    xar.addIncludePath(b.path("xar/xar/include"));
-    xar.addIncludePath(.{ .cwd_relative = "/usr/include" });
-    xar.addIncludePath(.{ .cwd_relative = "/usr/include/libxml2" });
-    xar.addIncludePath(.{ .cwd_relative = "/usr/include/x86_64-linux-gnu" });
-    xar.root_module.addCMacro("_GNU_SOURCE", "1");
+    xarmod.addIncludePath(b.path("xar/xar/include"));
+    xarmod.addIncludePath(.{ .cwd_relative = "/usr/include" });
+    xarmod.addIncludePath(.{ .cwd_relative = "/usr/include/libxml2" });
+    xarmod.addIncludePath(.{ .cwd_relative = "/usr/include/x86_64-linux-gnu" });
+    xarmod.addCMacro("_GNU_SOURCE", "1");
 
-    xar.addLibraryPath(.{ .cwd_relative = "/usr/lib/x86_64-linux-gnu" });
-    xar.linkSystemLibrary("lzma");
-    xar.linkSystemLibrary("bz2");
-    xar.linkSystemLibrary("z");
-    xar.linkSystemLibrary("crypto");
-    xar.linkSystemLibrary("xml2");
-    xar.linkLibC();
+    xarmod.addLibraryPath(.{ .cwd_relative = "/usr/lib/x86_64-linux-gnu" });
+    xarmod.linkSystemLibrary("lzma", .{});
+    xarmod.linkSystemLibrary("bz2", .{});
+    xarmod.linkSystemLibrary("z", .{});
+    xarmod.linkSystemLibrary("crypto", .{});
+    xarmod.linkSystemLibrary("xml2", .{});
+    xarmod.link_libc = true;
     b.installArtifact(xar);
 
     b.installDirectory(.{
@@ -57,54 +62,62 @@ pub fn build(b: *std.Build) void {
         .install_subdir = "xar",
     });
 
+    const xarexemod = b.createModule(.{
+        .root_source_file = null,
+        .target = target,
+        .optimize = optimize,
+    });
     const xarexe = b.addExecutable(.{
         .name = "xar",
-        .target = target,
-        .optimize = optimize,
+        .root_module = xarexemod,
     });
-    xarexe.addCSourceFile(.{
+    xarexemod.addCSourceFile(.{
         .file = b.path("xar/xar/src/xar.c"),
-        .flags = &[_][]const u8{},
+        .flags = &.{},
     });
-    xarexe.addIncludePath(b.path("xar/xar/include"));
-    xarexe.addIncludePath(.{ .cwd_relative = "/usr/include" });
-    xarexe.addIncludePath(.{ .cwd_relative = "/usr/include/libxml2" });
-    xarexe.addIncludePath(.{ .cwd_relative = "/usr/include/x86_64-linux-gnu" });
-    xarexe.root_module.addCMacro("_GNU_SOURCE", "1");
+    xarexemod.addIncludePath(b.path("xar/xar/include"));
+    xarexemod.addIncludePath(.{ .cwd_relative = "/usr/include" });
+    xarexemod.addIncludePath(.{ .cwd_relative = "/usr/include/libxml2" });
+    xarexemod.addIncludePath(.{ .cwd_relative = "/usr/include/x86_64-linux-gnu" });
+    xarexemod.addCMacro("_GNU_SOURCE", "1");
 
-    xarexe.linkLibrary(xar);
-    xarexe.addLibraryPath(.{ .cwd_relative = "/usr/lib/x86_64-linux-gnu" });
-    xarexe.linkSystemLibrary("xml2");
-    xarexe.linkSystemLibrary("z");
-    xarexe.linkSystemLibrary("crypto");
-    xarexe.linkSystemLibrary("lzma");
-    xarexe.linkSystemLibrary("bz2");
-    xarexe.linkLibrary(xar);
+    xarexemod.linkLibrary(xar);
+    xarexemod.addLibraryPath(.{ .cwd_relative = "/usr/lib/x86_64-linux-gnu" });
+    xarexemod.linkSystemLibrary("xml2", .{});
+    xarexemod.linkSystemLibrary("z", .{});
+    xarexemod.linkSystemLibrary("crypto", .{});
+    xarexemod.linkSystemLibrary("lzma", .{});
+    xarexemod.linkSystemLibrary("bz2", .{});
+    xarexemod.linkLibrary(xar);
 
-    xarexe.linkLibC();
+    xarexemod.link_libc = true;
     b.installArtifact(xarexe);
 
-    const exe = b.addExecutable(.{
-        .name = "pbxz",
+    const exemod = b.createModule(.{
+        .root_source_file = null,
         .target = target,
         .optimize = optimize,
     });
-    exe.addCSourceFile(.{
-        .file = b.path("pbzx/pbzx.c"),
-        .flags = &[_][]const u8{},
+    const exe = b.addExecutable(.{
+        .name = "pbxz",
+        .root_module = exemod,
     });
-    exe.addIncludePath(b.path("zig-out/include"));
-    exe.addIncludePath(.{ .cwd_relative = "/usr/include" });
-    exe.addIncludePath(.{ .cwd_relative = "/usr/include/x86_64-linux-gnu" });
+    exemod.addCSourceFile(.{
+        .file = b.path("pbzx/pbzx.c"),
+        .flags = &.{},
+    });
+    exemod.addIncludePath(b.path("zig-out/include"));
+    exemod.addIncludePath(.{ .cwd_relative = "/usr/include" });
+    exemod.addIncludePath(.{ .cwd_relative = "/usr/include/x86_64-linux-gnu" });
 
-    exe.linkLibrary(xar);
-    exe.addLibraryPath(.{ .cwd_relative = "/usr/lib/x86_64-linux-gnu" });
-    exe.linkSystemLibrary("xml2");
-    exe.linkSystemLibrary("z");
-    exe.linkSystemLibrary("crypto");
-    exe.linkSystemLibrary("bz2");
-    exe.linkSystemLibrary("lzma");
-    exe.linkLibrary(xar);
-    exe.linkLibC();
+    exemod.linkLibrary(xar);
+    exemod.addLibraryPath(.{ .cwd_relative = "/usr/lib/x86_64-linux-gnu" });
+    exemod.linkSystemLibrary("xml2", .{});
+    exemod.linkSystemLibrary("z", .{});
+    exemod.linkSystemLibrary("crypto", .{});
+    exemod.linkSystemLibrary("bz2", .{});
+    exemod.linkSystemLibrary("lzma", .{});
+    exemod.linkLibrary(xar);
+    exemod.link_libc = true;
     b.installArtifact(exe);
 }
