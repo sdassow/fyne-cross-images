@@ -19,6 +19,8 @@ RUN set -eux; \
         libxcursor-dev:amd64 \
         libxinerama-dev:amd64 \
          # deps to support wayland
+        libglfw3-dev:amd64 \
+        libgles2-mesa-dev:amd64 \
         libwayland-dev:amd64 \
         libxkbcommon-dev:amd64 \
         libdecor-0-dev:amd64 \
@@ -32,6 +34,8 @@ RUN set -eux; \
         libxcursor-dev:arm64 \
         libxinerama-dev:arm64 \
          # deps to support wayland
+        libglfw3-dev:arm64 \
+        libgles2-mesa-dev:arm64 \
         libwayland-dev:arm64 \
         libxkbcommon-dev:arm64 \
         libdecor-0-dev:arm64 \
@@ -45,6 +49,8 @@ RUN set -eux; \
         libxcursor-dev:armhf \
         libxinerama-dev:armhf \
          # deps to support wayland
+        libglfw3-dev:armhf \
+        libgles2-mesa-dev:armhf \
         libwayland-dev:armhf \
         libxkbcommon-dev:armhf \
         libdecor-0-dev:armhf \
@@ -58,6 +64,8 @@ RUN set -eux; \
         libxcursor-dev:i386 \
         libxinerama-dev:i386 \
          # deps to support wayland
+        libglfw3-dev:i386 \
+        libgles2-mesa-dev:i386 \
         libwayland-dev:i386 \
         libxkbcommon-dev:i386 \
         libdecor-0-dev:i386 \
